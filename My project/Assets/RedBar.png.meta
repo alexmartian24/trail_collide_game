@@ -1,10 +1,7 @@
 fileFormatVersion: 2
 guid: 161c48dfda8422e4ca68cf70e33729f7
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: 902293158061103495
-    second: RedBar_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +97,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RedBar_0
+      name: RedBar
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 499
-        height: 105
+        width: 105
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7895f71c8d6958c00800000000000000
-      internalID: 902293158061103495
+      spriteID: 4180cf2e93b8de94285d07582c3ad528
+      internalID: -348279011
       vertices: []
       indices: 
       edges: []
@@ -125,7 +122,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 7478dfe62d6b29674a1c6e87da46b941
     internalID: 0
     vertices: []
     indices: 
@@ -134,7 +131,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RedBar: -348279011
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

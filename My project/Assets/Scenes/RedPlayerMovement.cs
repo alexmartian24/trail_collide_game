@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BluePlayerMovement : MonoBehaviour
+public class RedPlayerMovement : MonoBehaviour
 {
     public GameObject trail;
     public float playerSpeed = 2;
@@ -30,22 +30,22 @@ public class BluePlayerMovement : MonoBehaviour
     {
         if (!isMoving)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 MoveToNextCell(Vector2Int.up);
                 transform.rotation = Quaternion.Euler(0, 0, 0);
             }
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.RightArrow))
             {
                 MoveToNextCell(Vector2Int.right);
                 transform.rotation = Quaternion.Euler(0, 0, 90);
             }
-            else if (Input.GetKeyDown(KeyCode.A))
+            else if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 MoveToNextCell(Vector2Int.left);
                 transform.rotation = Quaternion.Euler(0, 0, -90);
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.DownArrow))
             {
                 MoveToNextCell(Vector2Int.down);
                 transform.rotation = Quaternion.Euler(0, 0, 180);
