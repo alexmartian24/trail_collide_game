@@ -3,57 +3,99 @@ using UnityEngine;
 public class BluePlayerMovement : MonoBehaviour
 {
     public GameObject trail;
-    public float spawnRate = 2;
-    private float timer = 0;
+    public float spawnRate = 0.1f; // Controls how often trails spawn
     public float playerSpeed = 2;
     public Rigidbody2D myRigidBody;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private Vector2 lastDirection;
+    private Vector3 startPosition;
+    private bool canSpawnTrail = true;
+
     void Start()
     {
-        
+        startPosition = transform.position;
+        lastDirection = Vector2.up;
+        myRigidBody.linearVelocity = lastDirection * playerSpeed;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        // Immediately spawn the first trail
+        SpawnTrail();
+
+        // Continue spawning trails at regular intervals
+        InvokeRepeating(nameof(SpawnTrail), spawnRate, spawnRate);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            myRigidBody.linearVelocityY = playerSpeed;
-            myRigidBody.linearVelocityX = 0;
+            lastDirection = Vector2.up;
             transform.rotation = Quaternion.Euler(0, 0, 0);
-
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            myRigidBody.linearVelocityY = 0;
-            myRigidBody.linearVelocityX = playerSpeed;
+            lastDirection = Vector2.right;
             transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            myRigidBody.linearVelocityY = 0;
-            myRigidBody.linearVelocityX = -playerSpeed;
+            lastDirection = Vector2.left;
             transform.rotation = Quaternion.Euler(0, 0, -90);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            myRigidBody.linearVelocityY = -playerSpeed;
-            myRigidBody.linearVelocityX = 0;
+            lastDirection = Vector2.down;
             transform.rotation = Quaternion.Euler(0, 0, 180);
-        }
-        if (timer < spawnRate)
-        {
-            timer += Time.deltaTime;
-        }
-        else
-        {
-            timer = 0;
-            spawnTrail();
         }
     }
 
-    void spawnTrail()
+    void FixedUpdate()
     {
-        Instantiate(trail, new Vector3(transform.position.x, transform.position.y, 0), transform.rotation);
+        myRigidBody.linearVelocity = lastDirection * playerSpeed;
+    }
+
+    void SpawnTrail()
+    {
+        if (!canSpawnTrail) return; // Ensure trails only spawn when allowed
+
+        // Offset the trail so it doesn't spawn on the player
+        Vector3 trailPosition = transform.position - (Vector3)(lastDirection * 1.0f);
+        GameObject spawnedTrail = Instantiate(trail, trailPosition, transform.rotation);
+        
+        spawnedTrail.tag = "Trail"; 
+        spawnedTrail.AddComponent<BoxCollider2D>(); // Ensure trail has a collider
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Trail"))
+        {
+            Debug.Log("Collision detected with trail! Resetting game...");
+            ResetGame();
+        }
+    }
+
+    void ResetGame()
+    {
+        GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
+        foreach (GameObject t in trails)
+        {
+            Destroy(t);
+        }
+
+        transform.position = startPosition;
+        lastDirection = Vector2.up;
+        myRigidBody.linearVelocity = lastDirection * playerSpeed;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
+        canSpawnTrail = false;
+
+        // Ensure trails spawn correctly after reset
+        Invoke(nameof(EnableTrailSpawning), 0.5f);
+        SpawnTrail(); // Spawn a trail immediately after reset
+    }
+
+    void EnableTrailSpawning()
+    {
+        canSpawnTrail = true;
     }
 }
