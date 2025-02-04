@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2197960795948915166, guid: 305e73427a4a7e24c9c7736004750a82, type: 3}
+      propertyPath: m_TagString
+      value: RedTrail
+      objectReference: {fileID: 0}
     - target: {fileID: 4296505036939027260, guid: 305e73427a4a7e24c9c7736004750a82, type: 3}
       propertyPath: m_Size.y
       value: 4

@@ -89,6 +89,88 @@ public class BluePlayerMovement : MonoBehaviour
     void spawnTrail()
     {
         Vector3 spawnPosition = new Vector3(transform.position.x, transform.position.y, 1);
-        Instantiate(trail, spawnPosition, transform.rotation);
+        GameObject newTrail = Instantiate(trail, spawnPosition, transform.rotation);
+        
+        if (this.CompareTag("BluePlayer"))
+        {
+            newTrail.tag = "BlueTrail";
+        }
+        else if (this.CompareTag("RedPlayer"))
+        {
+            newTrail.tag = "RedTrail";
+        }
+
+        Debug.Log("Spawned Trail Tag: " + newTrail.tag);
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+{
+    ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>(); // Ensure we find the score manager
+
+    if (scoreManager != null)
+    {
+        // Both players will reset themselves
+        BluePlayerMovement bluePlayer = FindFirstObjectByType<BluePlayerMovement>();
+        RedPlayerMovement redPlayer = FindFirstObjectByType<RedPlayerMovement>();
+
+        if (CompareTag("BluePlayer") && other.CompareTag("RedTrail"))
+        {
+            Debug.Log("Blue Player hit Red Trail! Red gets a point.");
+            scoreManager.AddScore(2, 1);
+
+            bluePlayer.ResetPlayers();
+            redPlayer.ResetPlayers();
+        }
+        else if (CompareTag("RedPlayer") && other.CompareTag("BlueTrail"))
+        {
+            Debug.Log("Red Player hit Blue Trail! Blue gets a point.");
+            scoreManager.AddScore(1, 1);
+
+            bluePlayer.ResetPlayers();
+            redPlayer.ResetPlayers();
+        }
+    }
+    else
+    {
+        Debug.LogError("ScoreManager not found!");
+    }
+}
+
+public void ResetPlayers()
+{
+    // Remove all trails from the scene
+    GameObject[] blueTrails = GameObject.FindGameObjectsWithTag("BlueTrail");
+    foreach (GameObject trail in blueTrails)
+    {
+        Destroy(trail);
+    }
+
+    GameObject[] redTrails = GameObject.FindGameObjectsWithTag("RedTrail");
+    foreach (GameObject trail in redTrails)
+    {
+        Destroy(trail);
+    }
+
+    // Reset each player's position
+    if (CompareTag("BluePlayer"))
+    {
+        currentGridPosition = new Vector2Int(3, 8); // Update grid position
+        transform.position = GridManager.GridToWorldPosition(currentGridPosition); // Move to exact world position
+    }
+    else if (CompareTag("RedPlayer"))
+    {
+        currentGridPosition = new Vector2Int(13, 8); // Update grid position
+        transform.position = GridManager.GridToWorldPosition(currentGridPosition); // Move to exact world position
+    }
+
+    // Fully stop movement
+    myRigidBody.linearVelocity = Vector2.zero;
+    myRigidBody.angularVelocity = 0f;
+    myRigidBody.Sleep(); // Ensures Rigidbody2D resets all forces
+
+    isMoving = false; // Ensure movement doesn't continue after reset
+
+    // Reset rotation
+    transform.rotation = Quaternion.identity;
+}
 }
