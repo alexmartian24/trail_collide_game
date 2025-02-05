@@ -5,17 +5,20 @@ public class RedPlayerMovement : MonoBehaviour
     public GameObject trail;
     public float spawnRate = 0.1f; // Controls how often trails spawn
     public float playerSpeed = 2;
+    private float start_speed;
     public Rigidbody2D myRigidBody;
     private Vector2 lastDirection;
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
     public AudioSource death;
+    public FuelBoostScript fuel;
 
     public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void Start()
     {
         startPosition = transform.position;
+        start_speed = playerSpeed; 
         lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
         transform.rotation = Quaternion.Euler(0, 0, 90);
@@ -70,6 +73,25 @@ public class RedPlayerMovement : MonoBehaviour
             
 
                 redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (fuel.boost())
+            {
+                playerSpeed = start_speed * 2;
+                spawnRate = 0.2f;
+            }
+            else
+            {
+                playerSpeed = start_speed;
+                spawnRate = 0.1f;
+            }
+        }
+        else
+        {
+            playerSpeed = start_speed;
+            spawnRate = 0.1f;
+            fuel.boosting = false; 
         }
     }
 

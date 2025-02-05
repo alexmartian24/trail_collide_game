@@ -10,14 +10,21 @@ public class BluePlayerMovement : MonoBehaviour
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
     public AudioSource death;
+
+    public FuelBoostScript fuel;
+    
+    private float start_speed;
+
 public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void Start()
     {
+        start_speed = playerSpeed;
         startPosition = transform.position;
         lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
         transform.rotation = Quaternion.Euler(0, 0, -90);
+
 
         // Immediately spawn the first trail
         SpawnTrail();
@@ -70,6 +77,25 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
                 redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
                 scoreManager.AddScore(2, 1);
         }
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (fuel.boost())
+            {
+                playerSpeed = start_speed * 2;
+                spawnRate = 0.2f;
+            }
+            else
+            {
+                playerSpeed = start_speed;
+                spawnRate = 0.1f;
+            }
+        }
+        else
+        {
+            playerSpeed = start_speed;
+            spawnRate = 0.1f;
+            fuel.boosting = false;
+        }
     }
 
     void FixedUpdate()
@@ -116,6 +142,7 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
     public void ResetPosition()
     {
         death.Play();
+        fuel.refuel();
         transform.position = startPosition;
         lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
