@@ -1,35 +1,32 @@
 using UnityEngine;
+using System.Collections;
 
 public class BluePlayerMovement : MonoBehaviour
 {
     public GameObject trail;
-    public float spawnRate = 0.1f; // Controls how often trails spawn
+    public float spawnRate = 0.1f;
     public float playerSpeed = 2;
+    private float start_speed;
     public Rigidbody2D myRigidBody;
     private Vector2 lastDirection;
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
     public AudioSource death;
-
     public FuelBoostScript fuel;
     
-    private float start_speed;
+    private bool isHandlingCollision = false; // 🔹 Prevent multiple calls
 
-public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
+    public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void Start()
     {
-        start_speed = playerSpeed;
         startPosition = transform.position;
+        start_speed = playerSpeed;
         lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
         transform.rotation = Quaternion.Euler(0, 0, -90);
 
-
-        // Immediately spawn the first trail
         SpawnTrail();
-
-        // Continue spawning trails at regular intervals
         InvokeRepeating(nameof(SpawnTrail), spawnRate, spawnRate);
     }
 
@@ -59,25 +56,10 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
         if (transform.position.x < minX || transform.position.x > maxX ||
             transform.position.y < minY || transform.position.y > maxY)
         {
-            ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
-            Debug.Log("Collision detected with Blue PLayer and Border! Resetting game...");
-            GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
-            foreach (GameObject t in trails)
-            {
-                Destroy(t);
-            }
-
-            GameObject bluePlayerObject = GameObject.FindWithTag("BluePlayer");
-            GameObject redPlayerObject = GameObject.FindWithTag("RedPlayer");
-
-
-                bluePlayerObject.GetComponent<BluePlayerMovement>().ResetPosition();
-            
-
-                redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
-                scoreManager.AddScore(2, 1);
+            if (!isHandlingCollision) StartCoroutine(HandleCollision());
         }
-        if (Input.GetKey(KeyCode.LeftShift))
+
+        if (Input.GetKey(KeyCode.Space))
         {
             if (fuel.boost())
             {
@@ -105,23 +87,35 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void SpawnTrail()
     {
-        if (!canSpawnTrail) return; // Ensure trails only spawn when allowed
+        if (!canSpawnTrail) return;
 
-        // Offset the trail so it doesn't spawn on the player
         Vector3 trailPosition = transform.position - (Vector3)(lastDirection * 1.0f);
         GameObject spawnedTrail = Instantiate(trail, trailPosition, transform.rotation);
-        
-        spawnedTrail.tag = "Trail"; 
-        spawnedTrail.AddComponent<BoxCollider2D>(); // Ensure trail has a collider
+        spawnedTrail.tag = "Trail";
+        spawnedTrail.AddComponent<BoxCollider2D>();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Trail"))
+        if (collision.gameObject.CompareTag("Trail") && !isHandlingCollision) // 🔹 Prevent multiple triggers
         {
-            ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
-            Debug.Log("Collision detected with Blue PLayer and trail! Resetting game...");
-            GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
+            StartCoroutine(HandleCollision());
+        }
+    }
+
+    private IEnumerator HandleCollision()
+    {
+        if (isHandlingCollision) yield break; // 🔹 Exit if already handling collision
+        isHandlingCollision = true; // 🔹 Lock function
+
+        Debug.Log("Collision detected! Pausing game...");
+        ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
+
+        // Stop game by pausing time
+        Time.timeScale = 0;
+
+        // Destroy all existing trails
+        GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
         foreach (GameObject t in trails)
         {
             Destroy(t);
@@ -130,13 +124,20 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
         GameObject bluePlayerObject = GameObject.FindWithTag("BluePlayer");
         GameObject redPlayerObject = GameObject.FindWithTag("RedPlayer");
 
-
+        if (bluePlayerObject != null)
             bluePlayerObject.GetComponent<BluePlayerMovement>().ResetPosition();
-        
 
+        if (redPlayerObject != null)
             redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
-            scoreManager.AddScore(2, 1);
-        }
+
+        scoreManager.AddScore(2, 1);
+
+        // Wait for 2 seconds before resuming game
+        yield return new WaitForSecondsRealtime(1f);
+
+        Debug.Log("Resuming game...");
+        Time.timeScale = 1; // Resume game
+        isHandlingCollision = false; // 🔹 Unlock function for next collision
     }
 
     public void ResetPosition()
@@ -145,11 +146,11 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
         fuel.refuel();
         transform.position = startPosition;
         lastDirection = Vector2.right;
-        myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
+        myRigidBody.linearVelocity = lastDirection * playerSpeed;
         transform.rotation = Quaternion.Euler(0, 0, -90);
         canSpawnTrail = false;
-        Invoke(nameof(EnableTrailSpawning), 0.5f); // Delay before spawning trails again
-        SpawnTrail(); // Immediately spawn a trail after reset
+        Invoke(nameof(EnableTrailSpawning), 0.5f);
+        SpawnTrail();
     }
 
     void EnableTrailSpawning()
