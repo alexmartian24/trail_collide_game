@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BluePlayerMovement : MonoBehaviour
+public class RedPlayerMovement : MonoBehaviour
 {
     public GameObject trail;
     public float spawnRate = 0.1f; // Controls how often trails spawn
@@ -9,7 +9,8 @@ public class BluePlayerMovement : MonoBehaviour
     private Vector2 lastDirection;
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
-public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
+
+    public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
 
     void Start()
     {
@@ -27,22 +28,22 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             lastDirection = Vector2.up;
             transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             lastDirection = Vector2.right;
             transform.rotation = Quaternion.Euler(0, 0, 90);
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             lastDirection = Vector2.left;
             transform.rotation = Quaternion.Euler(0, 0, -90);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             lastDirection = Vector2.down;
             transform.rotation = Quaternion.Euler(0, 0, 180);
@@ -54,6 +55,7 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
             ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
             Debug.Log("Collision detected with trail! Resetting game...");
             GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
+            scoreManager.AddScore(1, 1);
             foreach (GameObject t in trails)
             {
                 Destroy(t);
@@ -67,7 +69,6 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
             
 
                 redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
-                scoreManager.AddScore(2, 1);
         }
     }
 
@@ -95,20 +96,21 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
             ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
             Debug.Log("Collision detected with trail! Resetting game...");
             GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
-        foreach (GameObject t in trails)
-        {
-            Destroy(t);
-        }
+            foreach (GameObject t in trails)
+            {
+                Destroy(t);
+            }
 
-        GameObject bluePlayerObject = GameObject.FindWithTag("BluePlayer");
-        GameObject redPlayerObject = GameObject.FindWithTag("RedPlayer");
+            GameObject bluePlayerObject = GameObject.FindWithTag("BluePlayer");
+            GameObject redPlayerObject = GameObject.FindWithTag("RedPlayer");
 
 
-            bluePlayerObject.GetComponent<BluePlayerMovement>().ResetPosition();
-        
+                bluePlayerObject.GetComponent<BluePlayerMovement>().ResetPosition();
+            
 
-            redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
-            scoreManager.AddScore(2, 1);
+                redPlayerObject.GetComponent<RedPlayerMovement>().ResetPosition();
+
+            scoreManager.AddScore(1, 1);
         }
     }
 
