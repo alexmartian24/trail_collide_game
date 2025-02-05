@@ -9,6 +9,7 @@ public class BluePlayerMovement : MonoBehaviour
     private Vector2 lastDirection;
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
+    public AudioSource death;
 public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void Start()
@@ -114,6 +115,7 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     public void ResetPosition()
     {
+        death.Play();
         transform.position = startPosition;
         lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
