@@ -140,6 +140,7 @@ public class RedPlayerMovement : MonoBehaviour
     public void ResetPosition()
     {
         death.Play();
+        fuel.refuel();
         transform.position = startPosition;
         lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
