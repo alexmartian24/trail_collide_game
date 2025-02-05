@@ -9,14 +9,14 @@ public class BluePlayerMovement : MonoBehaviour
     private Vector2 lastDirection;
     private Vector3 startPosition;
     private bool canSpawnTrail = true;
-public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
+public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
 
     void Start()
     {
         startPosition = transform.position;
-        lastDirection = Vector2.up;
+        lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 90);
 
         // Immediately spawn the first trail
         SpawnTrail();
@@ -35,12 +35,12 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
         else if (Input.GetKeyDown(KeyCode.D))
         {
             lastDirection = Vector2.right;
-            transform.rotation = Quaternion.Euler(0, 0, 90);
+            transform.rotation = Quaternion.Euler(0, 0, -90);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
             lastDirection = Vector2.left;
-            transform.rotation = Quaternion.Euler(0, 0, -90);
+            transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
@@ -52,7 +52,7 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
             transform.position.y < minY || transform.position.y > maxY)
         {
             ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
-            Debug.Log("Collision detected with trail! Resetting game...");
+            Debug.Log("Collision detected with Blue PLayer and Border! Resetting game...");
             GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
             foreach (GameObject t in trails)
             {
@@ -93,7 +93,7 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
         if (collision.gameObject.CompareTag("Trail"))
         {
             ScoreManager scoreManager = FindFirstObjectByType<ScoreManager>();
-            Debug.Log("Collision detected with trail! Resetting game...");
+            Debug.Log("Collision detected with Blue PLayer and trail! Resetting game...");
             GameObject[] trails = GameObject.FindGameObjectsWithTag("Trail");
         foreach (GameObject t in trails)
         {
@@ -115,9 +115,9 @@ public float minX = -5000f, maxX = 5000f, minY = -1000f, maxY = 1000f;
     public void ResetPosition()
     {
         transform.position = startPosition;
-        lastDirection = Vector2.up;
+        lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 90);
         canSpawnTrail = false;
         Invoke(nameof(EnableTrailSpawning), 0.5f); // Delay before spawning trails again
         SpawnTrail(); // Immediately spawn a trail after reset
