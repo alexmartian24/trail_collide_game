@@ -59,7 +59,7 @@ public class BluePlayerMovement : MonoBehaviour
             if (!isHandlingCollision) StartCoroutine(HandleCollision());
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             if (fuel.boost())
             {
