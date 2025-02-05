@@ -355,10 +355,10 @@ MonoBehaviour:
   spawnRate: 0.2
   playerSpeed: 5
   myRigidBody: {fileID: 945643241}
-  minX: -10
-  maxX: 10
-  minY: -5
-  maxY: 5
+  minX: -27
+  maxX: 27
+  minY: -10
+  maxY: 10
 --- !u!212 &945643240
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -449,13 +449,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 945643238}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.77, y: 0, z: 0.047208626}
+  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 26, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!61 &945643243
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -652,7 +652,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.26, y: 0.57}
+    oldSize: {x: 0.26, y: 0.58}
     newSize: {x: 0.26, y: 0.57}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -699,14 +699,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d72b022286c4df2b2768b61da347e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trail: {fileID: 2197960795948915166, guid: 305e73427a4a7e24c9c7736004750a82, type: 3}
+  trail: {fileID: 7931158021325959499, guid: d7f963c3e62b46c4c810660fada354cc, type: 3}
   spawnRate: 0.2
   playerSpeed: 5
   myRigidBody: {fileID: 1365498155}
-  minX: -10
-  maxX: 10
-  minY: -5
-  maxY: 5
+  minX: -27
+  maxX: 27
+  minY: -10
+  maxY: 10
 --- !u!212 &1365498157
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -751,7 +751,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7800161668622684062, guid: 8bf5922675acf34458fbd65849d60e62, type: 3}
+  m_Sprite: {fileID: -7858528601299611448, guid: af6eceb522d775145a34ed1f6616dd13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -770,13 +770,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1365498153}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.83, y: 0.08, z: -0.12071061}
+  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -26, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &2118325933
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,6 +806,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c24eeeeaf154fc693cd613fcb75242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player1Score: 0
+  player2Score: 0
+  player1ScoreText: {fileID: 0}
+  player2ScoreText: {fileID: 0}
 --- !u!4 &2118325935
 Transform:
   m_ObjectHideFlags: 0
