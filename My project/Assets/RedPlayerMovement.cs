@@ -15,9 +15,9 @@ public class RedPlayerMovement : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        lastDirection = Vector2.right;
+        lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
-        transform.rotation = Quaternion.Euler(0, 0, -90);
+        transform.rotation = Quaternion.Euler(0, 0, 90);
 
         // Immediately spawn the first trail
         SpawnTrail();
@@ -117,9 +117,9 @@ public class RedPlayerMovement : MonoBehaviour
     public void ResetPosition()
     {
         transform.position = startPosition;
-        lastDirection = Vector2.right;
+        lastDirection = Vector2.left;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
-        transform.rotation = Quaternion.Euler(0, 0, -90);
+        transform.rotation = Quaternion.Euler(0, 0, 90);
         canSpawnTrail = false;
         Invoke(nameof(EnableTrailSpawning), 0.5f); // Delay before spawning trails again
         SpawnTrail(); // Immediately spawn a trail after reset

@@ -14,9 +14,9 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
     void Start()
     {
         startPosition = transform.position;
-        lastDirection = Vector2.left;
+        lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed;
-        transform.rotation = Quaternion.Euler(0, 0, 90);
+        transform.rotation = Quaternion.Euler(0, 0, -90);
 
         // Immediately spawn the first trail
         SpawnTrail();
@@ -115,9 +115,9 @@ public float minX = -10000f, maxX = 10000f, minY = -2000f, maxY = 2000f;
     public void ResetPosition()
     {
         transform.position = startPosition;
-        lastDirection = Vector2.left;
+        lastDirection = Vector2.right;
         myRigidBody.linearVelocity = lastDirection * playerSpeed; // Ensures movement resets
-        transform.rotation = Quaternion.Euler(0, 0, 90);
+        transform.rotation = Quaternion.Euler(0, 0, -90);
         canSpawnTrail = false;
         Invoke(nameof(EnableTrailSpawning), 0.5f); // Delay before spawning trails again
         SpawnTrail(); // Immediately spawn a trail after reset
