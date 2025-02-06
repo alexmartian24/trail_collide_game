@@ -16,4 +16,12 @@ public class WinManager : MonoBehaviour
     {
         SceneManager.LoadScene("TrailCollide");
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
 }

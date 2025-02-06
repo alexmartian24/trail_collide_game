@@ -8,4 +8,11 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene("TrailCollide"); 
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P)){
+            SceneManager.LoadScene("TrailCollide");
+        }
+    }
+
 }
